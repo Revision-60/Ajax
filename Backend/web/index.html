@@ -48,10 +48,10 @@
 <body>
 
 <form id="customerForm">
-    <input type="text" placeholder="Customer ID">
-    <input type="text" placeholder="Customer Name">
-    <input type="text" placeholder="Customer Address">
-    <input type="text" placeholder="Customer Salary">
+    <input type="text" placeholder="Customer ID" name="cusId">
+    <input type="text" placeholder="Customer Name" name="cusName">
+    <input type="text" placeholder="Customer Address" name="cusAddress">
+    <input type="text" placeholder="Customer Salary" name="cusSalary">
 </form>
 
 <button id="btnSave">Save Customer</button>
@@ -89,7 +89,7 @@
 
         $.ajax({
             url:"customer",
-            method:"get",
+            method:"post",
             data:formData,
             dataType:"json"
         });

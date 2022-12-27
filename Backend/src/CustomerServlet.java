@@ -13,7 +13,14 @@ import java.io.IOException;
 @WebServlet(urlPatterns = "/customer")
 public class CustomerServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         System.out.println("Method doGet() Invoked..!");
+        String cusId = req.getParameter("cusId");
+        String cusName = req.getParameter("cusName");
+        String cusAddress = req.getParameter("cusAddress");
+        String cusSalary = req.getParameter("cusSalary");
+
+
+
     }
 }
