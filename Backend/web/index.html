@@ -87,10 +87,10 @@
             data:formData,
             dataType:"json",
             error:function (res) {
-                alert(res)
+                // alert(res)
             },
             success:function (){
-
+                alert("Success")
             }
         });
     });
@@ -101,6 +101,7 @@
             method: "get",
             dataType: "json",
             success: function (res) {
+                $("#tblCustomer").empty();
                 for (let customer of res) {
                     $("#tblCustomer").append(`<tr><td>${customer.id}</td><td>${customer.name}</td><td>${customer.address}</td><td>${customer.salary}</td></tr>`)
                 }
