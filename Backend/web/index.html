@@ -47,7 +47,7 @@
 </head>
 <body>
 
-<form>
+<form id="customerForm">
     <input type="text" placeholder="Customer ID">
     <input type="text" placeholder="Customer Name">
     <input type="text" placeholder="Customer Address">
@@ -84,9 +84,17 @@
 
 <script>
 
-    // $.ajax({
-    //     url:
-    // });
+    $("#btnSave").on("click", function () {
+        let formData = $("#customerForm").serialize();
+
+        $.ajax({
+            url:"customer",
+            method:"get",
+            data:formData,
+            dataType:"json"
+        });
+    })
+
 
 </script>
 
