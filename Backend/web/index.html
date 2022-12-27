@@ -57,8 +57,7 @@
 <button id="btnSave">Save Customer</button>
 <button>Update Customer</button>
 <button>Delete Customer</button>
-<button>Get All Customers</button>
-
+<button id="btnGetAll">Get All Customers</button>
 
 <table>
     <thead>
@@ -69,13 +68,8 @@
         <th>Customer Salary</th>
     </tr>
     </thead>
-    <tbody>
-    <tr>
-        <td>Test</td>
-        <td>Test</td>
-        <td>Test</td>
-        <td>Test</td>
-    </tr>
+    <tbody id="tblCustomer">
+
     </tbody>
 </table>
 
@@ -91,7 +85,26 @@
             url:"customer",
             method:"post",
             data:formData,
-            dataType:"json"
+            dataType:"json",
+            error:function (res) {
+                alert(res)
+            },
+            success:function (){
+
+            }
+        });
+    });
+
+    $("#btnGetAll").click(function () {
+        $.ajax({
+            url: "customer",
+            method: "get",
+            dataType: "json",
+            success: function (res) {
+                for (let customer of res) {
+                    $("#tblCustomer").append(`<tr><td>${customer.id}</td><td>${customer.name}</td><td>${customer.address}</td><td>${customer.salary}</td></tr>`)
+                }
+            }
         });
     })
 
