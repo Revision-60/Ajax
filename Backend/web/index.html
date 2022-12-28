@@ -78,6 +78,9 @@
 
 <script>
 
+    getAllCustomer();
+
+
     $("#btnSave").on("click", function () {
         let formData = $("#customerForm").serialize();
 
@@ -85,7 +88,7 @@
             url:"customer",
             method:"post",
             data:formData,
-            dataType:"json",
+            // dataType:"json",
             error:function (res) {
                 // alert(res)
             },
@@ -96,6 +99,10 @@
     });
 
     $("#btnGetAll").click(function () {
+        getAllCustomer();
+    });
+
+    function getAllCustomer() {
         $.ajax({
             url: "customer",
             method: "get",
@@ -107,6 +114,10 @@
                 }
             }
         });
+    }
+
+    $("#tblCustomer > tr").click(function () {
+        alert("Clicked");
     })
 
 
