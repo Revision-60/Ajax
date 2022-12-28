@@ -48,10 +48,10 @@
 <body>
 
 <form id="customerForm">
-    <input type="text" placeholder="Customer ID" name="cusId">
-    <input type="text" placeholder="Customer Name" name="cusName">
-    <input type="text" placeholder="Customer Address" name="cusAddress">
-    <input type="text" placeholder="Customer Salary" name="cusSalary">
+    <input type="text" placeholder="Customer ID" id="cusId" name="cusId">
+    <input type="text" placeholder="Customer Name" id="name" name="cusName">
+    <input type="text" placeholder="Customer Address" id="address" name="cusAddress">
+    <input type="text" placeholder="Customer Salary" id="salary" name="cusSalary">
 </form>
 
 <button id="btnSave">Save Customer</button>
@@ -112,13 +112,19 @@
                 for (let customer of res) {
                     $("#tblCustomer").append(`<tr><td>${customer.id}</td><td>${customer.name}</td><td>${customer.address}</td><td>${customer.salary}</td></tr>`)
                 }
+                $("#tblCustomer > tr").click(function () {
+
+                    $("#cusId").val($(this).children(":eq(0)").text())
+                    $("#name").val($(this).children(":eq(1)").text())
+                    $("#address").val($(this).children(":eq(2)").text())
+                    $("#salary").val($(this).children(":eq(3)").text())
+
+                })
             }
         });
     }
 
-    $("#tblCustomer > tr").click(function () {
-        alert("Clicked");
-    })
+
 
 
 </script>
