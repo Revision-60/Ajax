@@ -55,8 +55,8 @@
 </form>
 
 <button id="btnSave">Save Customer</button>
-<button>Update Customer</button>
-<button>Delete Customer</button>
+<button id="btnUpdate">Update Customer</button>
+<button id="btnDelete">Delete Customer</button>
 <button id="btnGetAll">Get All Customers</button>
 
 <table>
@@ -114,17 +114,50 @@
                 }
                 $("#tblCustomer > tr").click(function () {
 
-                    $("#cusId").val($(this).children(":eq(0)").text())
-                    $("#name").val($(this).children(":eq(1)").text())
-                    $("#address").val($(this).children(":eq(2)").text())
-                    $("#salary").val($(this).children(":eq(3)").text())
+                    $("#cusId").val($(this).children(":eq(0)").text());
+                    $("#name").val($(this).children(":eq(1)").text());
+                    $("#address").val($(this).children(":eq(2)").text());
+                    $("#salary").val($(this).children(":eq(3)").text());
 
                 })
+
             }
         });
     }
 
+    $("#btnUpdate").click(function () {
+        // let formData = $("#customerForm").serialize();
 
+        let customer={
+            cusId:$("#cusId").val(),
+            cusName:$("#name").val(),
+            cusAddress:$("#address").val(),
+            cusSalary:$("#salary").val()
+        };
+
+        $.ajax({
+            url:"customer",
+            method:"put",
+            contentType:"application/json",
+            // dataType: "json",
+            data: JSON.stringify(customer),
+            success:function (res) {
+                alert("Successfully Updated..!");
+            }
+        });
+    });
+
+    $("#btnDelete").click(function () {
+        let id = $("#cusId").val();
+        $.ajax({
+            url:"customer?cusId="+id,
+            method:"delete",
+            // dataType: "json",
+            success:function () {
+                alert("Deleted..!");
+            }
+        });
+    });
 
 
 </script>

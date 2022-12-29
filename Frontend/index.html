@@ -47,18 +47,17 @@
 </head>
 <body>
 
-<form>
-    <input type="text" placeholder="Customer ID">
-    <input type="text" placeholder="Customer Name">
-    <input type="text" placeholder="Customer Address">
-    <input type="text" placeholder="Customer Salary">
+<form id="customerForm">
+    <input type="text" placeholder="Customer ID" id="cusId" name="cusId">
+    <input type="text" placeholder="Customer Name" id="name" name="cusName">
+    <input type="text" placeholder="Customer Address" id="address" name="cusAddress">
+    <input type="text" placeholder="Customer Salary" id="salary" name="cusSalary">
 </form>
 
 <button id="btnSave">Save Customer</button>
-<button>Update Customer</button>
-<button>Delete Customer</button>
-<button>Get All Customers</button>
-
+<button id="btnUpdate">Update Customer</button>
+<button id="btnDelete">Delete Customer</button>
+<button id="btnGetAll">Get All Customers</button>
 
 <table>
     <thead>
@@ -69,13 +68,8 @@
         <th>Customer Salary</th>
     </tr>
     </thead>
-    <tbody>
-    <tr>
-        <td>Test</td>
-        <td>Test</td>
-        <td>Test</td>
-        <td>Test</td>
-    </tr>
+    <tbody id="tblCustomer">
+
     </tbody>
 </table>
 
@@ -84,9 +78,88 @@
 
 <script>
 
-    // $.ajax({
-    //     url:
-    // });
+    let baseUrl = "http://localhost:8080/backend/";
+    getAllCustomer();
+
+
+    $("#btnSave").on("click", function () {
+        let formData = $("#customerForm").serialize();
+
+        $.ajax({
+            url:baseUrl + "customer",
+            method:"post",
+            data:formData,
+            // dataType:"json",
+            error:function (res) {
+                // alert(res)
+            },
+            success:function (){
+                alert("Success")
+            }
+        });
+    });
+
+    $("#btnGetAll").click(function () {
+        getAllCustomer();
+    });
+
+    function getAllCustomer() {
+        $.ajax({
+            url: baseUrl + "customer",
+            method: "get",
+            dataType: "json",
+            success: function (res) {
+                $("#tblCustomer").empty();
+                for (let customer of res) {
+                    $("#tblCustomer").append(`<tr><td>${customer.id}</td><td>${customer.name}</td><td>${customer.address}</td><td>${customer.salary}</td></tr>`)
+                }
+                $("#tblCustomer > tr").click(function () {
+
+                    $("#cusId").val($(this).children(":eq(0)").text());
+                    $("#name").val($(this).children(":eq(1)").text());
+                    $("#address").val($(this).children(":eq(2)").text());
+                    $("#salary").val($(this).children(":eq(3)").text());
+
+                })
+
+            }
+        });
+    }
+
+    $("#btnUpdate").click(function () {
+        // let formData = $("#customerForm").serialize();
+
+        let customer={
+            cusId:$("#cusId").val(),
+            cusName:$("#name").val(),
+            cusAddress:$("#address").val(),
+            cusSalary:$("#salary").val()
+        };
+
+        $.ajax({
+            url:baseUrl + "customer",
+            method:"put",
+            contentType:"application/json",
+            // dataType: "json",
+            data: JSON.stringify(customer),
+            success:function (res) {
+                alert("Successfully Updated..!");
+            }
+        });
+    });
+
+    $("#btnDelete").click(function () {
+        let id = $("#cusId").val();
+        $.ajax({
+            url:baseUrl + "customer?cusId="+id,
+            method:"delete",
+            // dataType: "json",
+            success:function () {
+                alert("Deleted..!");
+            }
+        });
+    });
+
 
 </script>
 

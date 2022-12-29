@@ -1,7 +1,5 @@
 import javax.annotation.Resource;
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObjectBuilder;
+import javax.json.*;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -33,8 +31,7 @@ public class CustomerServlet extends HttpServlet {
         String cusAddress = req.getParameter("cusAddress");
         String cusSalary = req.getParameter("cusSalary");
 
-        try {
-            Connection connection = dataSource.getConnection();
+        try (Connection connection = dataSource.getConnection()){
 
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Customer VALUES (?,?,?,?)");
 
@@ -52,8 +49,6 @@ public class CustomerServlet extends HttpServlet {
                 resp.getWriter().write("Failed");
             }
 
-            connection.close();
-
         } catch (SQLException e) {
 
         }
@@ -62,8 +57,7 @@ public class CustomerServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try {
-            Connection connection = dataSource.getConnection();
+        try (Connection connection = dataSource.getConnection()){
 
             PreparedStatement pstm = connection.prepareStatement("SELECT * FROM Customer");
             ResultSet resultSet = pstm.executeQuery();
@@ -80,12 +74,52 @@ public class CustomerServlet extends HttpServlet {
                 allCustomers.add(customer.build());
             }
 
-            connection.close();
-
             resp.getWriter().print(allCustomers.build());
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        JsonReader reader = Json.createReader(req.getReader());
+        JsonObject customer = reader.readObject();
+
+        String cusId = customer.getString("cusId");
+        String cusName = customer.getString("cusName");
+        String cusAddress = customer.getString("cusAddress");
+        double cusSalary = Double.parseDouble(customer.getString("cusSalary"));
+
+        try(Connection connection = dataSource.getConnection()) {
+
+            PreparedStatement pstm = connection.prepareStatement("UPDATE Customer SET customerName=?, address=?, salary=? WHERE customerId=?");
+
+            pstm.setString(1, cusName);
+            pstm.setString(2, cusAddress);
+            pstm.setDouble(3, cusSalary);
+            pstm.setString(4, cusId);
+
+            pstm.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String cusId = req.getParameter("cusId");
+
+        try(Connection connection = dataSource.getConnection()) {
+            PreparedStatement pstm = connection.prepareStatement("DELETE FROM Customer WHERE customerId=?");
+            pstm.setString(1, cusId);
+            pstm.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }
